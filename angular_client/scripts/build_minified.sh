@@ -28,7 +28,7 @@ pwd
 echo "Copying over libraries to staging ground in $OUTPUTDIR"
 cp release/manifest.json $OUTPUTDIR/manifest.json
 mkdir -p $OUTPUTDIR/img
-cp release/img/lingsync.png $OUTPUTDIR/img/
+cp release/img/logo.png $OUTPUTDIR/img/
 cp release/img/loading-spinner.gif $OUTPUTDIR/img/
 cp release/libs/require.min.js $OUTPUTDIR/libs/
 

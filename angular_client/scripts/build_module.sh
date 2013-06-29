@@ -14,12 +14,12 @@ MODULE=$1
 
 echo "Building Angular HTML5 Client - $MODULE Module"
 ../node_modules/requirejs/bin/r.js -o  "modules/$MODULE/$MODULE""_build_config.js"
-../node_modules/requirejs/bin/r.js -o "cssIn=modules/$MODULE/css/LingSync.css" "out=release/LingSync.min.css"
+../node_modules/requirejs/bin/r.js -o "cssIn=modules/$MODULE/css/main.css" "out=release/main.min.css"
 echo "Cleaning up extra path in css "
-sed 's/\.\.\/\.\.\/[^/]*\/\.\.\/\.\.\///' release/LingSync.min.css > output
-mv output release/LingSync.min.css
+sed 's/\.\.\/\.\.\/[^/]*\/\.\.\/\.\.\///' release/main.min.css > output
+mv output release/main.min.css
 # Turning html into a  min.html
-sed "s/modules.*\.css/LingSync.min.css/" release/$MODULE.html | sed "s/modules.*\LingSyncSpreadsheet.js/LingSyncSpreadsheet.min.js/"  > output
+sed "s/modules.*\.css/main.min.css/" release/$MODULE.html | sed "s/modules.*\SpreadsheetStyleDataEntry.js/SpreadsheetStyleDataEntry.min.js/"  > output
 mv output release/$MODULE.html
 
 echo "Done building $MODULE"
