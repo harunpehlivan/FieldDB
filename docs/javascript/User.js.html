@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: user/User.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: user/User.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>define([
+    "backbone",
+    "hotkey/HotKey",
+    "user/UserGeneric",
+    "user/UserPreference",
+    "OPrime"
+], function(
+    Backbone, 
+    HotKey,
+    UserGeneric,
+    UserPreference
+) {
+  var User = UserGeneric.extend(
+  /** @lends User.prototype */
+  {
+    /**
+     * @class User extends from UserGeneric. It inherits the same attributes as UserGeneric but can 
+     * login. 
+     * 
+     * @property {String} firstname The user's first name. 
+     * @property {String} lastname The user's last name.
+     * @property {Array} teams This is a list of teams a user belongs to. 
+     * @property {Array} sessionHistory 
+     * @property {Permission} permissions This is where permissions are specified (eg. read only; add/edit data etc.)   
+     *
+     * @description The initialize function probably checks to see if the user is existing or new and creates a new account if it is new. 
+     * 
+     * @extends Backbone.Model
+     * @constructs
+     */
+    initialize: function(attributes) {
+      if (OPrime.debugMode) OPrime.debug("USER init");
+      User.__super__.initialize.call(this, attributes);
+      
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+      this.bind("change", this.checkPrefsChanged, this);
+    },
+    fillWithDefaults : function(){
+      // If there is no prefs, create a new one
+      if (!this.get("prefs")) {
+        this.set("prefs", new UserPreference({filledWithDefaults : true }));
+      }
+      
+      // If there is no hotkeys, create a new one
+      if (!this.get("hotkeys")) {
+        this.set("hotkeys", new HotKey({filledWithDefaults : true }));//TODO this needs to become plural when hotkeys get implemented
+      }
+    },
+    defaults : {
+      // Defaults from UserGeneric
+      username : "",
+      password : "",
+      email : "",
+      gravatar : "user/user_gravatar.png",
+      researchInterest : "",
+      affiliation : "",
+      description : "",
+      subtitle : "",
+      corpuses : [],
+      dataLists : [],
+      mostRecentIds : {},
+      // Defaults from User
+      firstname : "",
+      lastname : "",
+      teams : [],
+      sessionHistory : []
+    },
+
+    /**
+     * The subtitle function returns user's first and last names. 
+     */
+    subtitle: function () {
+    	if (this.get("firstname") == undefined) {
+        this.set("firstname","");
+      }
+      
+      if (this.get("lastname") == undefined) {
+        this.set("lastname","");
+      }
+      
+      return this.get("firstname") + " " + this.get("lastname");
+    },
+    checkPrefsChanged : function(){
+      try{
+        window.appView.userPreferenceView.model = this.get("prefs");
+        window.appView.userPreferenceView.render();
+      }catch(e){
+        
+      }
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    }
+  });
+
+  return User;
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-FieldDB.html">FieldDB</a></li></ul><h3>Classes</h3><ul><li><a href="Activity.html">Activity</a></li><li><a href="App.html">App</a></li><li><a href="AppRouter.html">AppRouter</a></li><li><a href="AudioVideo.html">AudioVideo</a></li><li><a href="Authentication.html">Authentication</a></li><li><a href="Comment.html">Comment</a></li><li><a href="Comments.html">Comments</a></li><li><a href="Confidential.html">Confidential</a></li><li><a href="Consultant.html">Consultant</a></li><li><a href="Consultants.html">Consultants</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Conversations.html">Conversations</a></li><li><a href="Corpus.html">Corpus</a></li><li><a href="Corpuses.html">Corpuses</a></li><li><a href="CorpusMask.html">CorpusMask</a></li><li><a href="DataList.html">DataList</a></li><li><a href="DataLists.html">DataLists</a></li><li><a href="Datum.html">Datum</a></li><li><a href="DatumField.html">DatumField</a></li><li><a href="DatumFields.html">DatumFields</a></li><li><a href="Datums.html">Datums</a></li><li><a href="DatumState.html">DatumState</a></li><li><a href="DatumStates.html">DatumStates</a></li><li><a href="DatumTag.html">DatumTag</a></li><li><a href="Export.html">Export</a></li><li><a href="HotKey.html">HotKey</a></li><li><a href="HotKeys.html">HotKeys</a></li><li><a href="Import.html">Import</a></li><li><a href="InsertUnicode.html">InsertUnicode</a></li><li><a href="InsertUnicodes.html">InsertUnicodes</a></li><li><a href="Lexicon.html">Lexicon</a></li><li><a href="LexiconNode.html">LexiconNode</a></li><li><a href="LexiconNodes.html">LexiconNodes</a></li><li><a href="Permission.html">Permission</a></li><li><a href="Permissions.html">Permissions</a></li><li><a href="ReportBot.html">ReportBot</a></li><li><a href="Search.html">Search</a></li><li><a href="Session.html">Session</a></li><li><a href="Sessions.html">Sessions</a></li><li><a href="Team.html">Team</a></li><li><a href="User.html">User</a></li><li><a href="UserApp.html">UserApp</a></li><li><a href="UserMask.html">UserMask</a></li><li><a href="UserPreference.html">UserPreference</a></li><li><a href="UserRouter.html">UserRouter</a></li><li>{String: Exercise}</li></ul><h3>Global</h3><ul><li><a href="global.html#baseSchema">baseSchema</a></li><li><a href="global.html#CorpusConnection">CorpusConnection</a></li><li><a href="global.html#newCorpusConnection">newCorpusConnection</a></li><li><a href="global.html#validateDbnameFormat">validateDbnameFormat</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Sun Feb 09 2014 10:49:22 GMT-0500 (EST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
